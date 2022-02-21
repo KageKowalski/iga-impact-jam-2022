@@ -11,6 +11,7 @@ var mob_scenes = [load("res://ArabWoman.tscn"), load("res://BlackMan.tscn"),
 	load("res://WhiteMan.tscn"), load("res://WhiteWoman.tscn")]
 var mob_instances = []
 var rand = RandomNumberGenerator.new()
+var mob_index = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -29,10 +30,32 @@ func _process(delta):
 	for mob_instance in mob_instances:
 		score += mob_instance.total_points
 	$CourtroomScoreLabel.set_text("Score:  " + str(score))
+	
+	# Handle mobs
+	var ran_num = rand.randf_range(0, 1000)
+	if global.difficulty == "Easy":
+		if ran_num < 10:
+			_spawn_mob_instance()
+	elif global.difficulty == "Medium":
+		if ran_num < 20:
+			_spawn_mob_instance()
+	elif global.difficulty == "Hard":
+		if ran_num < 40:
+			_spawn_mob_instance()
+
+
+# Remove old mob instance and spawn a new one
+func _spawn_mob_instance():
+	remove_child(mob_instances[mob_index])
+	var x = rand.randf_range(0, 1920)
+	var y = rand.randf_range(0, 1080)
+	mob_index = rand.randi_range(0, mob_instances.size()-1)
+	mob_instances[mob_index].position.x = x
+	mob_instances[mob_index].position.y = y
+	add_child(mob_instances[mob_index])
 
 
 # Sets minutes and seconds and prints to CourtroomTimerLabel
-var mob_index = 0
 func _on_CourtroomTimer_timeout():
 	# Set minutes + seconds, and stop timer at 1:00
 	if minutes == 1:
@@ -46,12 +69,3 @@ func _on_CourtroomTimer_timeout():
 	# Print time to CourtroomTimerLabel
 	$CourtroomTimerLabel.set_text("Time:  " + str(minutes).pad_zeros(1) +
 		" : " + str(seconds).pad_zeros(2))
-	
-	# Spawn and remove mob instances
-	remove_child(mob_instances[mob_index])
-	var x = rand.randf_range(0, 1920)
-	var y = rand.randf_range(0, 1080)
-	mob_index = rand.randi_range(0, mob_instances.size()-1)
-	mob_instances[mob_index].position.x = x
-	mob_instances[mob_index].position.y = y
-	add_child(mob_instances[mob_index])

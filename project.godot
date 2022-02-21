@@ -11,8 +11,12 @@ config_version=4
 [application]
 
 config/name="iga-impact-jam-2022"
-run/main_scene="res://Courtroom.tscn"
+run/main_scene="res://TitleScreen.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+global="*res://global.gd"
 
 [display]
 
