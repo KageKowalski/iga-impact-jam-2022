@@ -28,13 +28,12 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# Calculate and display score
-	var score = 0
+	global.score = 0
 	for mob_instance in mob_instances:
-		score += mob_instance.total_points
-	$CourtroomScoreLabel.set_text("Score:  " + str(score))
+		global.score += mob_instance.total_points
+	$CourtroomScoreLabel.set_text("Score:  " + str(global.score))
 	
-	# Handle mobs
-	
+	# Handle mobs based on difficulty
 	if global.difficulty == "Easy":
 		ran_num -= 20
 		if ran_num < 50:
@@ -77,3 +76,6 @@ func _on_CourtroomTimer_timeout():
 	# Print time to CourtroomTimerLabel
 	$CourtroomTimerLabel.set_text("Time:  " + str(minutes).pad_zeros(1) +
 		" : " + str(seconds).pad_zeros(2))
+	
+	if minutes == 1 and seconds == 0:
+		get_tree().change_scene("res://EndScreen.tscn")
