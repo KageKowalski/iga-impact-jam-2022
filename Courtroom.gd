@@ -12,12 +12,14 @@ var mob_scenes = [load("res://ArabWoman.tscn"), load("res://BlackMan.tscn"),
 var mob_instances = []
 var rand = RandomNumberGenerator.new()
 var mob_index = 0
+var ran_num = 0
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	courtroom_timer.start()
 	rand.randomize()
+	ran_num = rand.randf_range(0, 10000)
 	
 	for mob_scene in mob_scenes:
 		mob_instances.append(mob_scene.instance())
@@ -32,15 +34,21 @@ func _process(delta):
 	$CourtroomScoreLabel.set_text("Score:  " + str(score))
 	
 	# Handle mobs
-	var ran_num = rand.randf_range(0, 1000)
+	
 	if global.difficulty == "Easy":
-		if ran_num < 10:
+		ran_num -= 20
+		if ran_num < 50:
+			ran_num = rand.randf_range(0, 10000)
 			_spawn_mob_instance()
 	elif global.difficulty == "Medium":
-		if ran_num < 20:
+		ran_num -= 40
+		if ran_num < 50:
+			ran_num = rand.randf_range(0, 10000)
 			_spawn_mob_instance()
 	elif global.difficulty == "Hard":
-		if ran_num < 40:
+		ran_num -= 80
+		if ran_num < 50:
+			ran_num = rand.randf_range(0, 10000)
 			_spawn_mob_instance()
 
 
